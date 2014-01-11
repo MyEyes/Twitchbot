@@ -15,6 +15,9 @@ namespace Twitch_Bot
             while ((command = Console.ReadLine()) != "exit")
             {
                 string[] split = command.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                Message m = new Message(MessageType.PRIVMSG, split);
+                m.SenderName = "firzen14";
+                c.Handle(m);
             }
             c.Exit();
         }
