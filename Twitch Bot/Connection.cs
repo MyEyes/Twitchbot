@@ -11,8 +11,8 @@ namespace Twitch_Bot
 {
     partial class Connection
     {
-        public string Username = "FirzenBot";
-        public string ServerPassword = "oauth:nf017cvn9dndfocc4r8jltkr3cw0w4r";
+        public string Username = "";
+        public string ServerPassword = "";
         public string ServerAddress = "irc.twitch.tv";
         public int ServerPort = 6667;
 
@@ -36,6 +36,14 @@ namespace Twitch_Bot
         public Connection()
         {
 
+        }
+
+        public void ReadUser(string file)
+        {
+            StreamReader reader = new StreamReader(file);
+            Username = reader.ReadLine();
+            ServerPassword = reader.ReadLine();
+            reader.Close();
         }
 
         public void Connect()

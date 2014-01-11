@@ -10,6 +10,7 @@ namespace Twitch_Bot
         static void Main(string[] args)
         {
             Connection c = new Connection();
+            c.ReadUser("user.txt");
             c.Connect();
             string command = "";
             while ((command = Console.ReadLine()) != "exit")
