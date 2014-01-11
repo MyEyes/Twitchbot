@@ -12,8 +12,9 @@ namespace Twitch_Bot
         UserLevel AccessLevel;
         string[] AccessUsers;
         Action<string,string,string[]> _command;
+        bool silent = false;
 
-        public Command(string name, UserLevel level, string[] users, Action<string, string, string[]> command)
+        public Command(string name, UserLevel level, string[] users, Action<string, string, string[]> command, bool silent=false)
         {
             Name = name;
             AccessLevel = level;
@@ -25,7 +26,8 @@ namespace Twitch_Bot
         {
             if (user.Level >= AccessLevel)
             {
-                Console.WriteLine("User " + user.Name + " executed " + Name + " in " + room.Name + "!");
+                if (!silent)
+                    Console.WriteLine("User " + user.Name + " executed " + Name + " in " + room.Name + "!");
                 _command(user.Name, room.Name, parameters);
                 return true;
             }
@@ -34,12 +36,14 @@ namespace Twitch_Bot
                 for (int x = 0; x < AccessUsers.Length; x++)
                     if (user.Name == AccessUsers[x])
                     {
-                        Console.WriteLine("User " + user.Name + " executed " + Name + " in " + room.Name + "!");
+                        if (!silent)
+                            Console.WriteLine("User " + user.Name + " executed " + Name + " in " + room.Name + "!");
                         _command(user.Name, room.Name, parameters);
                         return true;
                     }
             }
-            Console.WriteLine("User " + user.Name + " does not have access to " + Name + " in " + room.Name + "!");
+            if (!silent)
+                Console.WriteLine("User " + user.Name + " does not have access to " + Name + " in " + room.Name + "!");
             return false;
         }
     }

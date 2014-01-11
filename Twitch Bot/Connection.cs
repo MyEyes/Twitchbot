@@ -30,6 +30,7 @@ namespace Twitch_Bot
         List<SayContainer> messageQueue = new List<SayContainer>();
 
         Dictionary<string, Room> currentRooms = new Dictionary<string,Room>();
+
         List<Command> commands = new List<Command>();
         List<RegularMessages> regulars = new List<RegularMessages>();
 
@@ -69,6 +70,7 @@ namespace Twitch_Bot
 
             Message UserMessage = new Message(MessageType.USER, Username, "0", "*", ":Firzen Bot");
             Send(UserMessage);
+
             StreamReader reader = new StreamReader("rooms.txt");
             while (!reader.EndOfStream)
                 Join(reader.ReadLine());
