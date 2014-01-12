@@ -11,9 +11,9 @@ namespace Twitch_Bot
 
         public void SetUpCommands()
         {
-            AddCommand(new Command("test", UserLevel.Mod, new string[] { "firzen14" }, Test));
-            AddCommand(new Command("join", UserLevel.Admin, new string[] { "firzen14" }, Join));
-            AddCommand(new Command("part", UserLevel.Mod, new string[] { "firzen14" }, Part));
+            AddCommand(new Command("test", UserLevel.Mod, new string[] { }, Test));
+            AddCommand(new Command("join", UserLevel.Admin, new string[] { }, Join));
+            AddCommand(new Command("part", UserLevel.Mod, new string[] { }, Part));
             AddCommand(new Command("Klappa", UserLevel.Normal, new string[] { }, Klappa));
             AddCommand(new Command("Slap", UserLevel.Normal, new string[] { }, Slap));
             AddCommand(new Command("Insult", UserLevel.Normal, new string[] { }, Insult));
