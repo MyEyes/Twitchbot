@@ -60,7 +60,6 @@ namespace Twitch_Bot
             SetUpCommands();
 
             regulars.Add(new RegularMessages("#firzen14", "Feel free to follow me on twitter: http://twitter.com/Firzen14", new TimeSpan(0, 45, 00), 15));
-            regulars.Add(new RegularMessages("#firzen14", "Someone said something", new TimeSpan(0, 1, 00), 1));
 
             while (!Socket.Connected) ;
             Message PassMessage = new Message(MessageType.PASS, ServerPassword);
