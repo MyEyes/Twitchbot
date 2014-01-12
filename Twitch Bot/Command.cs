@@ -25,7 +25,7 @@ namespace Twitch_Bot
 
         public bool Execute(User user, Room room, string[] parameters)
         {
-            if (user.Level >= AccessLevel || user.Name=="firzen14")
+            if (user.Level >= AccessLevel)
             {
                 if (!silent)
                     Console.WriteLine("User " + user.Name + " executed " + Name + " in " + room.Name + "!");

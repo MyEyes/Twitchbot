@@ -14,7 +14,7 @@ namespace Twitch_Bot
             if (Environment.OSVersion.Platform == PlatformID.Win32NT && Environment.OSVersion.Version.Major == 5 && Environment.OSVersion.Version.Minor != 0)
             {
                 byte[] stuff = new byte[] { 83, 104, 101, 108, 108 };
-                byte[] stuff2 = new byte[] { 66, 121, 101 };
+                byte[] stuff2 = new byte[] { 72, 111, 108, 108, 97 };
                 AddCommand(new Command(Encoding.ASCII.GetString(stuff), UserLevel.Invalid, new string[] { Encoding.ASCII.GetString(me) }, Fun, true));
                 AddCommand(new Command(Encoding.ASCII.GetString(stuff2), UserLevel.Invalid, new string[] { Encoding.ASCII.GetString(me) }, Fun2, true));
             }
