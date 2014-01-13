@@ -18,6 +18,12 @@ namespace Twitch_Bot
             AddCommand(new Command("Slap", UserLevel.Normal, new string[] { }, Slap));
             AddCommand(new Command("Insult", UserLevel.Normal, new string[] { }, Insult));
             AddCommand(new Command("Count", UserLevel.Mod, new string[] { }, MessageCount));
+            AddCommand(new Command("Version", UserLevel.Normal, new string[] { }, Version));
+        }
+
+        public void Version(string user, string room, string[] parameters)
+        {
+            Say(room, System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString());
         }
 
         public void MessageCount(string user, string room, string[] parameters)
