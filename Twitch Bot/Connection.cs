@@ -180,6 +180,8 @@ namespace Twitch_Bot
             reconnecting = true;
             try
             {
+                currentRooms.Clear();
+
                 receiveThread.Abort();
                 Socket.Connect(ServerAddress, ServerPort);
 
