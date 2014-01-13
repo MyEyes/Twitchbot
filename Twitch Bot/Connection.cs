@@ -15,6 +15,8 @@ namespace Twitch_Bot
         public string ServerPassword = "";
         public string ServerAddress = "irc.twitch.tv";
         public int ServerPort = 6667;
+        //Change this if you run your on
+        public string SuperAdminName = "firzen14";
 
         Socket Socket;
         Thread receiveThread;
@@ -43,10 +45,18 @@ namespace Twitch_Bot
 
         public void ReadUser(string file)
         {
-            StreamReader reader = new StreamReader(file);
-            Username = reader.ReadLine();
-            ServerPassword = reader.ReadLine();
-            reader.Close();
+            if (File.Exists(file))
+            {
+                StreamReader reader = new StreamReader(file);
+                Username = reader.ReadLine();
+                ServerPassword = reader.ReadLine();
+                reader.Close();
+            }
+            else
+            {
+                Console.WriteLine("ERROR: No user file, can not join server");
+                Exit();
+            }
         }
 
         public void Connect()
@@ -59,8 +69,6 @@ namespace Twitch_Bot
             sendTimer = new Timer(new TimerCallback(Update), null, 1000, 2000);
 
             SetUpCommands();
-
-            regulars.Add(new RegularMessages("#firzen14", "Feel free to follow me on twitter: http://twitter.com/Firzen14", new TimeSpan(0, 45, 00), 15));
 
             while (!Socket.Connected) ;
 
@@ -75,11 +83,43 @@ namespace Twitch_Bot
             Message UserMessage = new Message(MessageType.USER, Username, "0", "*", ":Firzen Bot");
             Send(UserMessage);
 
-            StreamReader reader = new StreamReader("rooms.txt");
-            while (!reader.EndOfStream)
-                Join(reader.ReadLine());
-            Insurance();
-            reader.Close();
+            if (File.Exists("rooms.txt"))
+            {
+                StreamReader reader = new StreamReader("rooms.txt");
+                while (!reader.EndOfStream)
+                    Join(reader.ReadLine());
+                Insurance();
+                reader.Close();
+            }
+            else
+            {
+                Console.WriteLine("ERROR: No rooms to join, read the readme file!");
+                Exit();
+            }
+
+            if (File.Exists("regulars.txt"))
+            {
+                StreamReader reader = new StreamReader("regulars.txt");
+                while (!reader.EndOfStream)
+                {
+                    string room = reader.ReadLine();
+                    string message = reader.ReadLine();
+                    string sminutes = reader.ReadLine();
+                    string smessages = reader.ReadLine();
+                    int minutes = 0;
+                    int messages = 0;
+                    int.TryParse(sminutes, out minutes);
+                    int.TryParse(smessages, out messages);
+                    regulars.Add(new RegularMessages(room, message, new TimeSpan(0, minutes, 00), messages));
+                }
+                Insurance();
+                reader.Close();
+            }
+            else
+            {
+                Console.WriteLine("Warning: No file for regular messages!");
+            }
+
         }
 
         public void Reconnect()
