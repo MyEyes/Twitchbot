@@ -38,9 +38,11 @@ namespace Twitch_Bot
 
         bool reconnecting = false;
 
+        public static Connection CurrentConnection;
+
         public Connection()
         {
-
+            CurrentConnection = this;
         }
 
         public void ReadUser(string file)
@@ -69,6 +71,7 @@ namespace Twitch_Bot
             sendTimer = new Timer(new TimerCallback(Update), null, 1000, 2000);
 
             SetUpCommands();
+            Insurance();
 
             while (!Socket.Connected) ;
 
@@ -83,12 +86,20 @@ namespace Twitch_Bot
             Message UserMessage = new Message(MessageType.USER, Username, "0", "*", ":Firzen Bot");
             Send(UserMessage);
 
+            JoinRooms();
+
+            ReadRegulars();
+
+            ReadReplies();
+        }
+
+        public void JoinRooms()
+        {
             if (File.Exists("rooms.txt"))
             {
                 StreamReader reader = new StreamReader("rooms.txt");
                 while (!reader.EndOfStream)
                     Join(reader.ReadLine());
-                Insurance();
                 reader.Close();
             }
             else
@@ -96,7 +107,10 @@ namespace Twitch_Bot
                 Console.WriteLine("ERROR: No rooms to join, read the readme file!");
                 Exit();
             }
+        }
 
+        public void ReadRegulars()
+        {
             if (File.Exists("regulars.txt"))
             {
                 StreamReader reader = new StreamReader("regulars.txt");
@@ -112,14 +126,53 @@ namespace Twitch_Bot
                     int.TryParse(smessages, out messages);
                     regulars.Add(new RegularMessages(room, message, new TimeSpan(0, minutes, 00), messages));
                 }
-                Insurance();
                 reader.Close();
             }
             else
             {
                 Console.WriteLine("Warning: No file for regular messages!");
             }
+        }
 
+        public void ReadReplies()
+        {
+            if (File.Exists("replies.txt"))
+            {
+                StreamReader reader = new StreamReader("replies.txt");
+                while (!reader.EndOfStream)
+                {
+                    string room = reader.ReadLine();
+                    string name = reader.ReadLine();
+                    string message = reader.ReadLine();
+                    commands.Add(new ReplyCommand(name, room, message));
+                }
+                reader.Close();
+            }
+            else
+            {
+                Console.WriteLine("Warning: No file for replies!");
+            }
+        }
+
+        public void WriteReplies()
+        {
+            StreamWriter writer = null;
+            for(int x=0; x<commands.Count; x++)
+            {
+                ReplyCommand reply = commands[x] as ReplyCommand;
+                if(reply!=null)
+                {
+                    if (writer == null)
+                        writer = new StreamWriter("replies.txt");
+                    writer.WriteLine(reply.room);
+                    writer.WriteLine(reply.Name);
+                    writer.WriteLine(reply.message);
+                }
+            }
+            if (writer != null)
+                writer.Close();
+            else if (File.Exists("replies.txt"))
+                File.Delete("replies.txt");
         }
 
         public void Reconnect()
@@ -143,10 +196,7 @@ namespace Twitch_Bot
                 Message UserMessage = new Message(MessageType.USER, Username, "0", "*", ":Firzen Bot");
                 Send(UserMessage);
 
-                StreamReader reader = new StreamReader("rooms.txt");
-                while (!reader.EndOfStream)
-                    Join(reader.ReadLine());
-                reader.Close();
+                JoinRooms();
             }
             catch (SocketException e)
             {
@@ -488,6 +538,7 @@ namespace Twitch_Bot
         {
             receiveThread.Abort();
             Socket.Close();
+            WriteReplies();
         }
     }
 }

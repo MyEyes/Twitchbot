@@ -16,3 +16,17 @@ user.txt which should contain username and passowrd, like so:
 username
 password
 ```
+
+There are optional files to specify as well:
+
+regulars.txt
+```
+#room1
+message1
+time between messages in minutes1
+min messages before saying stuff1
+#room2
+message2
+time between messages in minutes2
+minmessages before saying stuff2
+```

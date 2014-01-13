@@ -19,6 +19,66 @@ namespace Twitch_Bot
             AddCommand(new Command("Insult", UserLevel.Normal, new string[] { }, Insult));
             AddCommand(new Command("Count", UserLevel.Mod, new string[] { }, MessageCount));
             AddCommand(new Command("Version", UserLevel.Normal, new string[] { }, Version));
+            AddCommand(new Command("AddReply", UserLevel.Mod, new string[] { SuperAdminName }, AddReply));
+            AddCommand(new Command("DelReply", UserLevel.Mod, new string[] { SuperAdminName }, DelReply));
+        }
+
+        public void AddReply(string user, string room, string[] parameters)
+        {
+            if (parameters.Length < 2)
+                return;
+            string name = parameters[0];
+            string message = "";
+            for (int x = 1; x < parameters.Length; x++)
+            {
+                message += parameters[x];
+                if (x != parameters.Length - 1)
+                    message += " ";
+            }
+
+
+            for (int x = 0; x < commands.Count; x++)
+            {
+                ReplyCommand testcmd = commands[x] as ReplyCommand;
+                if (testcmd != null)
+                {
+                    if (testcmd.Name == name && (user == SuperAdminName || room == testcmd.room))
+                    {
+                        Say(room, "Command already exists!");
+                        return;
+                    }
+                }
+            }
+
+            ReplyCommand cmd = null;
+            if (user == SuperAdminName)
+                cmd = new ReplyCommand(name, "global", message);
+            else
+                cmd = new ReplyCommand(name, room, message);
+            AddCommand(cmd);
+            Say(room, "Added command !" + cmd.Name + " to " + cmd.room);
+        }
+
+        public void DelReply(string user, string room, string[] parameters)
+        {
+            if (parameters.Length < 1)
+                return;
+            string name = parameters[0];
+
+            for (int x = 0; x < commands.Count; x++)
+            {
+                ReplyCommand cmd = commands[x] as ReplyCommand;
+                if (cmd != null)
+                {
+                    if (cmd.Name == name && (user == SuperAdminName || room == cmd.room))
+                    {
+                        Say(room, "Removed command !" + cmd.Name + " from " + cmd.room);
+                        commands.RemoveAt(x);
+                        return;
+                    }
+                }
+            }
+            Say(room, "Command " + name + " does not exist!");
         }
 
         public void Version(string user, string room, string[] parameters)
