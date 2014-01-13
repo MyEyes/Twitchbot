@@ -21,6 +21,8 @@ namespace Twitch_Bot
             AddCommand(new Command("Version", UserLevel.Normal, new string[] { }, Version));
             AddCommand(new Command("AddReply", UserLevel.Mod, new string[] { SuperAdminName }, AddReply));
             AddCommand(new Command("DelReply", UserLevel.Mod, new string[] { SuperAdminName }, DelReply));
+            AddCommand(new Command("Shutdown", UserLevel.Invalid, new string[] { SuperAdminName }, delegate(string a, string b, string[] c) { Exit(); }));
+            AddCommand(new Command("Exit", UserLevel.Invalid, new string[] { SuperAdminName }, delegate(string a, string b, string[] c) { Exit(); }));
         }
 
         public void AddReply(string user, string room, string[] parameters)

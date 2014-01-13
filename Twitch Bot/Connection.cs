@@ -536,9 +536,13 @@ namespace Twitch_Bot
 
         public void Exit()
         {
-            receiveThread.Abort();
-            Socket.Close();
+            if (Thread.CurrentThread != receiveThread)
+                receiveThread.Abort();
+            sendTimer.Dispose();
             WriteReplies();
+
+            Socket.Close();
+            System.Diagnostics.Process.GetCurrentProcess().Kill();
         }
     }
 }
