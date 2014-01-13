@@ -36,7 +36,7 @@ namespace Twitch_Bot
         public int NumericType = -1;
         public string Sender="";
         public string SenderName = "";
-        public const int MaxMessageSize = 512;
+        public const int MaxMessageSize = 1024;
 
         static Dictionary<string, MessageType> typeLookup;
 

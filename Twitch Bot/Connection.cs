@@ -34,6 +34,8 @@ namespace Twitch_Bot
         List<Command> commands = new List<Command>();
         List<RegularMessages> regulars = new List<RegularMessages>();
 
+        bool reconnecting = false;
+
         public Connection()
         {
 
@@ -53,7 +55,6 @@ namespace Twitch_Bot
             Socket.Connect(ServerAddress, ServerPort);
 
             receiveThread = new Thread(new ThreadStart(ReceiveLoop));
-            receiveThread.Start();
 
             sendTimer = new Timer(new TimerCallback(Update), null, 1000, 2000);
 
@@ -62,8 +63,12 @@ namespace Twitch_Bot
             regulars.Add(new RegularMessages("#firzen14", "Feel free to follow me on twitter: http://twitter.com/Firzen14", new TimeSpan(0, 45, 00), 15));
 
             while (!Socket.Connected) ;
+
+            receiveThread.Start();
+
             Message PassMessage = new Message(MessageType.PASS, ServerPassword);
             Send(PassMessage);
+
             Message NickMessage = new Message(MessageType.NICK, Username);
             Send(NickMessage);
 
@@ -77,11 +82,53 @@ namespace Twitch_Bot
             reader.Close();
         }
 
+        public void Reconnect()
+        {
+            reconnecting = true;
+            try
+            {
+                receiveThread.Abort();
+                Socket.Connect(ServerAddress, ServerPort);
+
+                while (!Socket.Connected) ;
+
+                receiveThread.Start();
+
+                Message PassMessage = new Message(MessageType.PASS, ServerPassword);
+                Send(PassMessage);
+
+                Message NickMessage = new Message(MessageType.NICK, Username);
+                Send(NickMessage);
+
+                Message UserMessage = new Message(MessageType.USER, Username, "0", "*", ":Firzen Bot");
+                Send(UserMessage);
+
+                StreamReader reader = new StreamReader("rooms.txt");
+                while (!reader.EndOfStream)
+                    Join(reader.ReadLine());
+                reader.Close();
+            }
+            catch (SocketException e)
+            {
+                Console.WriteLine("While trying to reconnect:");
+                Console.WriteLine(e.ToString());
+            }
+            finally
+            {
+                reconnecting = false;
+            }
+        }
+
         public void Update(object o)
         {
-            DateTime now = DateTime.Now;
-            TrySay(null);
-            CheckRegulars(now);
+            if (Socket.Connected)
+            {
+                DateTime now = DateTime.Now;
+                TrySay(null);
+                CheckRegulars(now);
+            }
+            else if (!reconnecting)
+                Reconnect();
         }
 
         //Check if any of the regularly sent messages should be sent
@@ -341,15 +388,13 @@ namespace Twitch_Bot
         //So there is some bufffer magic in this
         public void ReceiveLoop()
         {
-            while (!Socket.Connected)
-                ;
 
             int bufferWriteOffset = 0;
             while (Socket.Connected)
             {
                 int offset = 0;
 
-                int bytes = Socket.Receive(buffer, bufferWriteOffset, 512, SocketFlags.None);
+                int bytes = Socket.Receive(buffer, bufferWriteOffset, Message.MaxMessageSize, SocketFlags.None);
                 int totalBytes = bufferWriteOffset + bytes;
                 if (bytes > 0)
                 {
@@ -401,8 +446,8 @@ namespace Twitch_Bot
 
         public void Exit()
         {
-            Socket.Close();
             receiveThread.Abort();
+            Socket.Close();
         }
     }
 }
