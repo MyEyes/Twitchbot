@@ -12,7 +12,7 @@ namespace Twitch_Bot
         public string Username = "";
         public string ServerPassword = "";
         //Change this if you run your own
-        public string SuperAdminName = "firzen14";
+        public const string SuperAdminName = "firzen14";
 
         Timer sendTimer;
 

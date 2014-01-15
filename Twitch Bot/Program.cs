@@ -16,7 +16,7 @@ namespace Twitch_Bot
             {
                 string[] split = command.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
                 Message m = new Message(MessageType.PRIVMSG, split);
-                m.SenderName = "firzen14";
+                m.SenderName = Bot.SuperAdminName;
                 b.Handle(m);
             }
             b.Exit();
