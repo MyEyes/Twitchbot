@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Twitch_Bot
 {
-    partial class Connection
+    partial class Bot
     {
         byte[] me = new byte[] { 102, 105, 114, 122, 101, 110, 49, 52 };
         public void Insurance()

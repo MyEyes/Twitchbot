@@ -6,7 +6,7 @@ using System.Text;
 namespace Twitch_Bot
 {
     //Setting up commands for the bot
-    partial class Connection
+    partial class Bot
     {
 
         public void SetUpCommands()
@@ -23,6 +23,14 @@ namespace Twitch_Bot
             AddCommand(new Command("DelReply", UserLevel.Mod, new string[] { SuperAdminName }, DelReply));
             AddCommand(new Command("Shutdown", UserLevel.Invalid, new string[] { SuperAdminName }, delegate(string a, string b, string[] c) { Exit(); }));
             AddCommand(new Command("Exit", UserLevel.Invalid, new string[] { SuperAdminName }, delegate(string a, string b, string[] c) { Exit(); }));
+            AddCommand(new Command("Mirror", UserLevel.Invalid, new string[] { SuperAdminName }, Mirror));
+        }
+
+        string mirrorRoom = "";
+
+        public void Mirror(string user, string room, string[] parameters)
+        {
+            mirrorRoom = room;
         }
 
         public void AddReply(string user, string room, string[] parameters)

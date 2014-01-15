@@ -9,18 +9,17 @@ namespace Twitch_Bot
     {
         static void Main(string[] args)
         {
-            Connection c = new Connection();
-            c.ReadUser("user.txt");
-            c.Connect();
+            Bot b = new Bot();
+            b.Connect();
             string command = "";
             while ((command = Console.ReadLine()) != "exit")
             {
                 string[] split = command.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
                 Message m = new Message(MessageType.PRIVMSG, split);
                 m.SenderName = "firzen14";
-                c.Handle(m);
+                b.Handle(m);
             }
-            c.Exit();
+            b.Exit();
         }
     }
 }
