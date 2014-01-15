@@ -29,11 +29,22 @@ namespace Twitch_Bot
         public void Connect()
         {
             Socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            Socket.Connect(ServerAddress, ServerPort);
+            while (!Socket.Connected)
+            {
+                try
+                {
+                    Socket.Connect(ServerAddress, ServerPort);
+                }
+                catch (SocketException se)
+                {
+                    Console.WriteLine("Error connecting to server, retrying...");
+                    SpinWait.SpinUntil(delegate { return false; }, 1000);
+                }
+            }
 
             receiveThread = new Thread(new ThreadStart(ReceiveLoop));
 
-            while (!Socket.Connected) ;
+
 
             receiveThread.Start();
         }
@@ -43,10 +54,23 @@ namespace Twitch_Bot
             try
             {
                 receiveThread.Abort();
-                Socket.Connect(ServerAddress, ServerPort);
+                Socket.Dispose();
+                Socket = new System.Net.Sockets.Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                while (!Socket.Connected)
+                {
+                    try
+                    {
+                        Socket.Connect(ServerAddress, ServerPort);
+                    }
+                    catch (SocketException se)
+                    {
+                        Console.WriteLine("Error connecting to server, retrying...");
+                        SpinWait.SpinUntil(delegate { return false; }, 1000);
+                    }
+                }
 
                 while (!Socket.Connected) ;
-
+                receiveThread = new Thread(ReceiveLoop);
                 receiveThread.Start();
             }
             catch (SocketException e)
@@ -58,7 +82,8 @@ namespace Twitch_Bot
 
         public void Send(Message m)
         {
-            Socket.Send(m.ToBytes());
+            if (Socket != null && Socket.Connected)
+                Socket.Send(m.ToBytes());
         }
         
         //Receive thread

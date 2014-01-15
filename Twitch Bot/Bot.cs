@@ -18,6 +18,7 @@ namespace Twitch_Bot
 
         DateTime[] coolDowns = new DateTime[20];
         DateTime lastSent = DateTime.Now;
+        DateTime lastPing = DateTime.Now;
 
         List<SayContainer> messageQueue = new List<SayContainer>();
 
@@ -119,14 +120,17 @@ namespace Twitch_Bot
 
         public void Update(object o)
         {
-            if (connection.Connected)
+            if (connection.Connected && (DateTime.Now - lastPing).TotalMinutes<6)
             {
                 DateTime now = DateTime.Now;
                 TrySay(null);
                 CheckRegulars(now);
             }
             else if (!reconnecting)
+            {
+                Console.WriteLine("Lost connection, attempting to reconnect");
                 Reconnect();
+            }
         }
 
         //Callback to try to clear out the message queue
@@ -208,6 +212,7 @@ namespace Twitch_Bot
         //Callback to handle a message
         public void Handle(Message m)
         {
+            lastPing = DateTime.Now;
             switch (m.Type)
             {
                 case MessageType.NUMERIC:
@@ -261,6 +266,7 @@ namespace Twitch_Bot
 
                 case MessageType.PING:
                     Message pong = new Message(MessageType.PONG, m.Parameters);
+                    Console.WriteLine("Time since last ping: " + (DateTime.Now - lastPing).ToString());
                     connection.Send(pong);
                     break;
 
@@ -270,6 +276,8 @@ namespace Twitch_Bot
                         Room room = GetRoom(m.Parameters[0]);
                         if (room != null)
                             room.Join(m.SenderName);
+                        if (m.SenderName.ToLower() == "rejectedbot")
+                            Say(room.Name, "Rejectedbot I hope you can see this message now that the chat has died down. I wanted to say congrats! I know you can do a little bitter but I always want to tip my hat off to you. Through thick and thin I will still be here to always support you. I know times are hard, but you always come back with a good attitude. I wish you the very best on your next runs, and hope you get an even better score. I will continue to be here and find new strats as always. Great job Rejectedbot. I am rooting for you always! You should be proud.");
                     }
                     break;
                 case MessageType.PART:
@@ -325,6 +333,7 @@ namespace Twitch_Bot
                 connection.Reconnect();
                 Login();
                 JoinRooms();
+                lastPing = DateTime.Now;
             }
             finally
             {
