@@ -266,7 +266,6 @@ namespace Twitch_Bot
 
                 case MessageType.PING:
                     Message pong = new Message(MessageType.PONG, m.Parameters);
-                    Console.WriteLine("Time since last ping: " + (DateTime.Now - lastPing).ToString());
                     connection.Send(pong);
                     break;
 
