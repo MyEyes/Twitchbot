@@ -99,7 +99,15 @@ namespace Twitch_Bot
             {
                 int offset = 0;
 
-                int bytes = Socket.Receive(buffer, bufferWriteOffset, Message.MaxMessageSize, SocketFlags.None);
+                int bytes = 0;
+                try
+                {
+                    bytes = Socket.Receive(buffer, bufferWriteOffset, Message.MaxMessageSize, SocketFlags.None);
+                }
+                catch (SocketException se)
+                {
+                    Console.WriteLine("Exception occurred while trying to receive:" + se.ToString());
+                }
                 int totalBytes = bufferWriteOffset + bytes;
                 if (bytes > 0)
                 {

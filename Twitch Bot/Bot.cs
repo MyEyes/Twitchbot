@@ -166,6 +166,14 @@ namespace Twitch_Bot
             connection.Send(JoinMessage);
         }
 
+        public void ReJoinRooms()
+        {
+            foreach (string name in currentRooms.Keys)
+            {
+                Join(name);
+            }
+        }
+
         public void Part(string room)
         {
             if (currentRooms.Count > 1)
@@ -331,7 +339,7 @@ namespace Twitch_Bot
                 currentRooms.Clear();
                 connection.Reconnect();
                 Login();
-                JoinRooms();
+                ReJoinRooms();
                 lastPing = DateTime.Now;
             }
             finally
