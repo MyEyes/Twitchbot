@@ -336,7 +336,6 @@ namespace Twitch_Bot
             reconnecting = true;
             try
             {
-                currentRooms.Clear();
                 connection.Reconnect();
                 Login();
                 ReJoinRooms();

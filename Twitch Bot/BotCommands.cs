@@ -18,7 +18,7 @@ namespace Twitch_Bot
             AddCommand(new Command("Slap", UserLevel.Normal, new string[] { }, Slap));
             AddCommand(new Command("Insult", UserLevel.Normal, new string[] { }, Insult));
             AddCommand(new Command("Count", UserLevel.Mod, new string[] { }, MessageCount));
-            AddCommand(new Command("Version", UserLevel.Normal, new string[] { }, Version));
+            AddCommand(new Command("Info", UserLevel.Normal, new string[] { }, Version));
             AddCommand(new Command("AddReply", UserLevel.Mod, new string[] { SuperAdminName }, AddReply));
             AddCommand(new Command("DelReply", UserLevel.Mod, new string[] { SuperAdminName }, DelReply));
             AddCommand(new Command("Shutdown", UserLevel.Invalid, new string[] { SuperAdminName }, delegate(string a, string b, string[] c) { Exit(); }));
@@ -93,7 +93,7 @@ namespace Twitch_Bot
 
         public void Version(string user, string room, string[] parameters)
         {
-            Say(room, System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString());
+            Say(room, System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString() + " by Firzen14 running on " + System.Environment.MachineName);
         }
 
         public void MessageCount(string user, string room, string[] parameters)
