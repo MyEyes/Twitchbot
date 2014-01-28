@@ -171,7 +171,8 @@ namespace Twitch_Bot
             foreach (string name in currentRooms.Keys)
             {
                 currentRooms[name].Users.Clear();
-                Join(name);
+                Message JoinMessage = new Message(MessageType.JOIN, name);
+                connection.Send(JoinMessage);
             }
         }
 

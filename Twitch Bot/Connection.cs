@@ -54,6 +54,7 @@ namespace Twitch_Bot
             try
             {
                 receiveThread.Abort();
+                Socket.Shutdown(SocketShutdown.Both);
                 Socket.Dispose();
                 Socket = new System.Net.Sockets.Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
                 while (!Socket.Connected)
@@ -64,7 +65,8 @@ namespace Twitch_Bot
                     }
                     catch (SocketException se)
                     {
-                        Console.WriteLine("Error connecting to server, retrying...");
+                        Console.WriteLine("Error {0} while connecting to server, retrying...",se.ErrorCode);
+                        Console.WriteLine(se);
                         SpinWait.SpinUntil(delegate { return false; }, 1000);
                     }
                 }
