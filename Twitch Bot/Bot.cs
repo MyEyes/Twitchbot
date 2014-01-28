@@ -170,6 +170,7 @@ namespace Twitch_Bot
         {
             foreach (string name in currentRooms.Keys)
             {
+                currentRooms[name].Users.Clear();
                 Join(name);
             }
         }
