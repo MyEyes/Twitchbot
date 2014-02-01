@@ -38,6 +38,19 @@ namespace Twitch_Bot
         public Room(string name)
         {
             Name = name;
+            User streamer = new User();
+            streamer.Name = name.Substring(1);
+            streamer.Level = UserLevel.Streamer;
+            Users.Add(streamer);
+        }
+
+        public void Clear()
+        {
+            Users.Clear();
+            User streamer = new User();
+            streamer.Name = Name.Substring(1);
+            streamer.Level = UserLevel.Streamer;
+            Users.Add(streamer);
         }
 
         public User GetUser(string name)
