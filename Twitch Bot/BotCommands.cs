@@ -45,17 +45,11 @@ namespace Twitch_Bot
             AddCommand(new Command("Info", UserLevel.Normal, new string[] { }, Version));
             AddCommand(new Command("AddReply", UserLevel.Mod, new string[] { SuperAdminName }, AddReply));
             AddCommand(new Command("DelReply", UserLevel.Mod, new string[] { SuperAdminName }, DelReply));
+            AddCommand(new Command("Boom", UserLevel.Invalid, new string[] { SuperAdminName }, Boom));
             AddCommand(new Command("Shutdown", UserLevel.Invalid, new string[] { SuperAdminName }, delegate(string a, string b, string[] c) { Exit(); }));
             AddCommand(new Command("Exit", UserLevel.Invalid, new string[] { SuperAdminName }, delegate(string a, string b, string[] c) { Exit(); }));
-            AddCommand(new Command("Mirror", UserLevel.Invalid, new string[] { SuperAdminName }, Mirror));
         }
 
-        string mirrorRoom = "";
-
-        public void Mirror(string user, string room, string[] parameters)
-        {
-            mirrorRoom = room;
-        }
 
         public void AddReply(string user, string room, string[] parameters)
         {
@@ -156,6 +150,17 @@ namespace Twitch_Bot
             if (parameters.Length < 1)
                 return;
             Join(parameters[0]);
+        }
+
+        public void Boom(string user, string room, string[] parameters)
+        {
+            if (parameters.Length < 1)
+                return;
+            Join(parameters[0]);
+            string message = "Latinum matris futuende eloquisne? Consectetur adipiscing elit. In ac aliquam lectus. Maecenas id est nec enim auctor vulputate sed eget felis. Etiam et malesuada urna. Phasellus pellentesque et nisl nec tempus. Sed mollis ullamcorper arcu id hendrerit. Sed congue lacinia dui, nec tristique ante blandit et. Vestibulum augue justo, placerat feugiat tempus id, viverra ut tellus. Quisque adipiscing risus ut dui congue scelerisque. Aliquam justo nisl, semper id metus sed, egestas volutpat ipsum.";
+            Say(parameters[0], message);
+            System.Threading.SpinWait.SpinUntil(delegate() { return false; }, 4000);
+            Part(parameters[0]);
         }
 
         public void Part(string user, string room, string[] parameters)

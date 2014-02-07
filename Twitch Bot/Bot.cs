@@ -271,16 +271,6 @@ namespace Twitch_Bot
                             Room.Messages++;
                         if (Room == null)
                             return;
-                        if (mirrorRoom != "")
-                        {
-                            string text = "";
-                            for (int x = 1; x < m.Parameters.Length; x++)
-                            {
-                                text += " " + m.Parameters[x];
-                            }
-                            if (Room.Name == mirrorRoom)
-                                Say("#" + Username.ToLower(), m.SenderName + ":" + text);
-                        }
                         if (m.Parameters.Length > 1 && m.Parameters[1].Length > 1 && m.Parameters[1][1] == '!')
                             if (HandleCommand(m)) break;
 
@@ -309,8 +299,6 @@ namespace Twitch_Bot
                         Room room = GetRoom(m.Parameters[0]);
                         if (room != null)
                             room.Join(m.SenderName);
-                        if (m.SenderName.ToLower() == "rejectedbot")
-                            Say(room.Name, "Rejectedbot I hope you can see this message now that the chat has died down. I wanted to say congrats! I know you can do a little bitter but I always want to tip my hat off to you. Through thick and thin I will still be here to always support you. I know times are hard, but you always come back with a good attitude. I wish you the very best on your next runs, and hope you get an even better score. I will continue to be here and find new strats as always. Great job Rejectedbot. I am rooting for you always! You should be proud.");
                     }
                     break;
                 case MessageType.PART:
