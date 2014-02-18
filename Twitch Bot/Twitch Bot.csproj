@@ -63,7 +63,6 @@
     <Compile Include="Command.cs" />
     <Compile Include="Connection.cs" />
     <Compile Include="BotCommands.cs" />
-    <Compile Include="Insurance.cs" />
     <Compile Include="Message.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

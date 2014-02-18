@@ -74,7 +74,6 @@ namespace Twitch_Bot
             JoinRooms();
             ReadRegulars();
             ReadReplies();
-            Insurance();
             sendTimer = new Timer(Update, null, 1, 2);
         }
 
