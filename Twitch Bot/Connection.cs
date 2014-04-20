@@ -35,7 +35,7 @@ namespace Twitch_Bot
 {
     class Connection
     {
-        public string ServerAddress = "irc.twitch.tv";
+        public string ServerAddress = "199.9.250.229";
         public int ServerPort = 6667;
 
         Socket Socket;
@@ -62,6 +62,7 @@ namespace Twitch_Bot
                 catch (SocketException se)
                 {
                     Console.WriteLine("Error connecting to server, retrying...");
+                    Console.WriteLine(se);
                     SpinWait.SpinUntil(delegate { return false; }, 1000);
                 }
             }
